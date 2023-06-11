@@ -4,7 +4,7 @@ const html404 = `<!DOCTYPE html>
   <p>The url you visit is not found.</p>
 </body>`
 
-const statichtml = "https://wlnxing.github.io/URL-Shorten-Worker/index.html"
+const statichtml = "https://github.com/JohnnyNetsec/Url-Shorten-By-CF-Worker/raw/main/g.index.html"
 
 
 async function randomString (len) {
@@ -52,7 +52,7 @@ async function handleRequest (request) {
         let req = await request.json()
         console.log(req["url"])
         if (!await checkURL(req["url"]))
-            return new Response(`{"msg":"URL错误"}`, { status: 400, headers: { "Content-Type": "application/json" } })
+            return new Response(`{"msg":"URL Error"}`, { status: 400, headers: { "Content-Type": "application/json" } })
         let random_key = await save_url(req["url"], req["shortStr"])
         console.log(random_key)
         // 放成功了
@@ -60,9 +60,9 @@ async function handleRequest (request) {
             return new Response(`{"data":{"shortUrl":"${random_key}"}}`, { status: 200, headers: { "Content-Type": "application/json" } })
         // 自定义的路径重复了
         else if (random_key === -1)
-            return new Response(`{"msg":"自定义路径已重复"}`, { status: 400, headers: { "Content-Type": "application/json" } })
+            return new Response(`{"msg":"Customized URL Duplicated"}`, { status: 400, headers: { "Content-Type": "application/json" } })
         // 没测试k-v满了之后会怎么样，如果有错的话put时应该会有返回（猜测（懒
-        else return new Response(`{"msg":"k-v限额已满，求放过别刷啦"}`, { status: 500, headers: { "Content-Type": "application/json" } })
+        else return new Response(`{"msg":"k-v Daily quota reached. Check it next day!"}`, { status: 500, headers: { "Content-Type": "application/json" } })
     }
     const requestURL = new URL(request.url)
     // todo 规范路径的'/'
